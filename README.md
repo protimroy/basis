@@ -2,7 +2,7 @@
 
 ###### Basis is a low-level PyTorch library for building neural networks from scratch. It is used to create custom layers, optimizers, and other components from scratch. One can think of it as the laboratory for learning about the inner workings of neural networks.
 
-## Project Structure
+###### Project Structure
 
 ```
 basis
@@ -57,33 +57,29 @@ basis
 └── README.md
 ```
 
-## Installation
+###### Installation
 
-To install the required dependencies, run:
+###### To install the required dependencies, run:
 
 ```
 pip install -r requirements.txt
 ```
 
-## Usage
+###### Usage
 
-1. **Data Preparation**: Place your raw data in the `data/raw` directory. Processed data will be stored in `data/processed`.
-2. **Training the Model**: Use the `src/main.py` file to train the neural network. You can modify the training parameters in the `configs/config.yaml` file.
-3. **Exploration and Experiments**: Use the Jupyter notebooks in the `notebooks` directory for data exploration and running experiments.
-4. **Visualizations**: After training, use the scripts in the `visualizations/post_training` directory to visualize the results.
+###### 1. **Data Preparation**: Place your raw data in the `data/raw` directory. Processed data will be stored in `data/processed`.
+###### 2. **Training the Model**: Use the `src/main.py` file to train the neural network. You can modify the training parameters in the `configs/config.yaml` file.
+###### 3. **Exploration and Experiments**: Use the Jupyter notebooks in the `notebooks` directory for data exploration and running experiments.
+###### 4. **Visualizations**: After training, use the scripts in the `visualizations/post_training` directory to visualize the results.
 
-## Testing
+###### Testing
 
-Unit tests for layers, optimizers, and models are located in the `tests` directory. Run the tests using:
+###### Unit tests for layers, optimizers, and models are located in the `tests` directory. Run the tests using:
 
 ```
 pytest tests/
 ```
 
-## Contributing
+###### License
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+###### This project is licensed under the MIT License. See the LICENSE file for details.
