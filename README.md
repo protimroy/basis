@@ -65,21 +65,6 @@ basis
 pip install -r requirements.txt
 ```
 
-###### Usage
-
-###### 1. **Data Preparation**: Place your raw data in the `data/raw` directory. Processed data will be stored in `data/processed`.
-###### 2. **Training the Model**: Use the `src/main.py` file to train the neural network. You can modify the training parameters in the `configs/config.yaml` file.
-###### 3. **Exploration and Experiments**: Use the Jupyter notebooks in the `notebooks` directory for data exploration and running experiments.
-###### 4. **Visualizations**: After training, use the scripts in the `visualizations/post_training` directory to visualize the results.
-
-###### Testing
-
-###### Unit tests for layers, optimizers, and models are located in the `tests` directory. Run the tests using:
-
-```
-pytest tests/
-```
-
 ###### License
 
 ###### This project is licensed under the MIT License. See the LICENSE file for details.
