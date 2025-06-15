@@ -1,57 +1,36 @@
 ###### Basis
 
-###### Basis is a low-level PyTorch library for building neural networks from scratch. It is used to create custom layers, optimizers, and other components from scratch. One can think of it as the laboratory for learning about the inner workings of neural networks.
-
-###### Project Structure
+###### Basis is a low-level PyTorch library for building neural networks from scratch. It is used to create custom layers, optimizers, and other ingredients required in crafting a neural network. One can think of it as the laboratory for exploring and experimenting about the inner workings of neural networks.
 
 ```
-basis
-├── src
-│   ├── layers
+basis/
+├── src/
+│   ├── layers/
 │   │   ├── __init__.py
 │   │   ├── base.py
 │   │   ├── input.py
 │   │   ├── dense.py
+│   │   ├── mixin.py
 │   │   └── weight.py
-│   ├── optimizers
+│   ├── optimizers/
 │   │   ├── __init__.py
 │   │   ├── base.py
 │   │   └── gradient_descent.py
-│   ├── losses
+│   ├── losses/
 │   │   ├── __init__.py
+│   │   ├── base_loss.py
 │   │   └── cross_entropy.py
-│   ├── models
+│   ├── models/
 │   │   ├── __init__.py
 │   │   └── neural_network.py
-│   ├── trainers
-│   │   ├── __init__.py
-│   │   └── trainer.py
-│   ├── utils
+│   ├── utils/
 │   │   ├── __init__.py
 │   │   ├── data_loader.py
-│   │   └── metrics.py
-│   └── main.py
-├── notebooks
-│   ├── data_exploration.ipynb
-│   └── experiments.ipynb
-├── data
-│   ├── raw
-│   ├── processed
-│   └── README.md
-├── visualizations
-│   ├── pre_training
-│   │   └── data_analysis.py
-│   ├── post_training
-│   │   ├── loss_curves.py
-│   │   ├── predictions.py
-│   │   └── parameter_evolution.py
-│   └── utils.py
-├── tests
-│   ├── test_layers.py
-│   ├── test_optimizers.py
-│   └── test_models.py
-├── configs
-│   └── config.yaml
+│   │   ├── tensorboard_logs.py
+│   │   └── gpu_monitor.py
+├── notebooks/
+│   ├── experiments.ipynb
+│   └── runs/  # TensorBoard logs directory
 ├── requirements.txt
 ├── setup.py
 └── README.md
@@ -64,3 +43,7 @@ basis
 ```
 pip install -r requirements.txt
 ```
+
+###### Usage
+
+###### See `notebooks/experiments.ipynb` for examples of how to use the library.
