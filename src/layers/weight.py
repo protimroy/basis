@@ -54,7 +54,11 @@ class WeightLayer( BaseLayer ):
         #limit = math.sqrt( 2. / ( fan_in + fan_out ) );
         limit = torch.sqrt( torch.tensor( 2 ) / ( fan_in + fan_out ) ).item();
         #self.weights = torch.randn(fan_out, fan_in).float() * limit;
-        self.weights = torch.randn( fan_out, fan_in, dtype=torch.float32, requires_grad=True, device=self.device ) * limit;
+        # Scale first (no autograd tracking), then mark as requiring grad so that
+        # self.weights is a genuine leaf tensor. Multiplying a requires_grad tensor
+        # by `limit` would produce a non-leaf tensor and emit ".grad on non-leaf"
+        # warnings when we manage gradients manually.
+        self.weights = ( torch.randn( fan_out, fan_in, dtype=torch.float32, device=self.device ) * limit ).requires_grad_( True );
         self.initial_weights = self.weights.data.clone();
 
         self.name = f"W_{self.src.name}_{self.dest.name}_layer";

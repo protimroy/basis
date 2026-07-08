@@ -205,6 +205,52 @@ class NeuralNetwork:
         self.clear_all_gradients()
     
     
+    def fit(self, train_data, train_labels, epochs, verbose=100):
+        """
+        Lightweight, fully-vectorised training loop.
+
+        Unlike :meth:`train`, this method runs the whole dataset through a single
+        batched forward/backward pass per epoch and performs no GPU profiling,
+        TensorBoard logging or ``cuda.synchronize`` calls. For small problems
+        (e.g. XOR) this removes the Python-loop and instrumentation overhead that
+        otherwise dominates the wall-clock time, so it is dramatically faster.
+
+        Args:
+            train_data (torch.Tensor): shape (num_samples, input_units).
+            train_labels (torch.Tensor): shape (num_samples, output_units).
+            epochs (int): number of training epochs.
+            verbose (int): print loss every ``verbose`` epochs (0 disables printing).
+
+        Returns:
+            list[float]: the mean loss recorded at each epoch.
+        """
+        if self.loss_fn is None or self.optimizer is None:
+            raise RuntimeError("Network must be compiled with a loss function and optimizer before training.")
+
+        device = next(iter(self.trainable_parameters.values())).device
+
+        # Column-major layout: features/units along dim 0, samples along dim 1.
+        X = train_data.to(device).transpose(0, 1)     # (input_units, num_samples)
+        Y = train_labels.to(device).transpose(0, 1)   # (output_units, num_samples)
+
+        loss_history = []
+        for epoch in range(epochs):
+            self.clear_all_gradients()
+
+            output = self.forward(X)['output']
+            loss_value = self.loss_fn(output, Y)
+
+            grad_loss_wrt_output = self.loss_fn.backward()
+            self.backward(grad_loss_wrt_output)
+
+            self.optimizer.step()
+
+            loss_history.append(loss_value.item())
+            if verbose and ((epoch + 1) % verbose == 0 or epoch == 0):
+                print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss_value.item():.6f}")
+
+        return loss_history
+
     def train(self, train_data, train_labels, epochs, 
           save_param_history=False, param_save_interval=100,
           profile_gpu=True):
@@ -311,6 +357,14 @@ class NeuralNetwork:
                     bwd_time = time.time() - bwd_start
                     self.writer.add_scalar('Timing/backward_pass_ms', bwd_time * 1000, epoch * num_samples + i)
             
+            # Average the accumulated gradients over the batch. Each per-sample backward
+            # pass sums its gradient into .grad, so divide by num_samples to obtain the
+            # mean gradient. This makes the effective learning rate match the configured
+            # value instead of being scaled by the batch size.
+            for param in self.trainable_parameters.values():
+                if param.grad is not None:
+                    param.grad /= num_samples
+
             # Update parameters
             self.optimizer.step()
             

@@ -48,4 +48,8 @@ class Loss( object ):
                 raise ValueError( "Output not set. Call forward() first." );
             # Corrected derivative for binary cross-entropy
             # dL/da = - (target/output - (1-target)/(1-output)) = (output - target) / (output * (1 - output))
-            return (self.output - self.target) / (self.output * (1.0 - self.output) + 1e-9) # add epsilon for stability
+            # The forward loss uses torch.mean(), so divide by the number of elements to
+            # keep the backward pass consistent with the averaged forward loss. For a
+            # single sample this divides by 1 and leaves the previous behaviour unchanged.
+            n = self.output.numel()
+            return (self.output - self.target) / (self.output * (1.0 - self.output) + 1e-9) / n # add epsilon for stability

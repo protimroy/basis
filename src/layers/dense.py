@@ -102,9 +102,10 @@ class DenseLayer( Layer ):
         # Accumulate gradient for bias (dL/dbias = dL/dz * dz/dbias = dL/dz * 1 = dL/dz)
         if self.bias.grad is None:
             self.bias.grad = torch.zeros_like(self.bias)
-        
-        # Corrected: Directly add dL_dz, as it already has the correct shape and per-node gradients
-        self.bias.grad += dL_dz # No sum needed for single sample, dL_dz is already (num_nodes, 1)
+
+        # Sum over the batch dimension so the bias gradient keeps shape (num_nodes, 1).
+        # For a single sample (batch size 1) this is identical to the previous behaviour.
+        self.bias.grad += dL_dz.sum(dim=-1, keepdim=True)
 
         # Gradient to pass to the previous layer (WeightLayer) is dL/dZ
         # This is exactly dL_dz
