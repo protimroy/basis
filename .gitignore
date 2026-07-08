@@ -19,8 +19,6 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# TensorBoard runs
-notebooks/runs/
 
 # PyTorch profiler traces
 *.pt.trace.json
